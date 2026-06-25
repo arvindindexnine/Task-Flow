@@ -1,0 +1,62 @@
+---
+description: Actionable security rules for the Lentra backend. This file guides the daily development of secure code.
+---
+
+# Lentra Backend Security Rules
+
+## 1. Securing Endpoints: Authorization & Rate Limiting
+
+This project uses a layered approach with Guards for security. Follow these rules when creating or modifying controllers and endpoints.
+
+### How to Secure an Endpoint:
+
+1.  **Authenticate First**: Apply the `JwtAuthGuard` to verify the user's identity via their JWT.
+2.  **Authorize Actions**: Apply the `PermissionGuard` and use the `@Permissions()` decorator to specify what action is allowed on a resource.
+3.  **Rate Limit**: Apply the `ThrottlerGuard` to public-facing or sensitive endpoints.
+
+### Rules:
+
+- **Guard Order is Critical**: Guards are executed in sequence. The required order for protected endpoints is `JwtAuthGuard`, then `PermissionGuard`.
+- **Use `@SkipAuth()` for Public Endpoints Only**: This decorator bypasses authentication and should only be used for endpoints like login, registration, or public health checks.
+- **Apply Rate Limiting**: All public endpoints (`@SkipAuth`) _must_ have a `ThrottlerGuard` to prevent abuse.
+
+```typescript
+// Correct Usage Example for a Protected Route:
+@Controller('users')
+@UseGuards(JwtAuthGuard, PermissionGuard) // Correct order is mandatory
+export class UserController {
+
+  @Get()
+  @Permissions({ resource: 'user', action: 'get' }) // Specific permission required
+  getAllUsers() { /* ... */ }
+}
+
+// Correct Usage Example for a Public Route:
+@Post('login')
+@SkipAuth() // Bypasses Authentication and Authorization Check
+@UseGuards(ThrottlerGuard) // Protects against brute-force attacks
+login() { /* ... */ }
+```
+
+## 2. Validating Inputs with DTOs
+
+All data entering the system must be validated. This is enforced by a global `ValidationPipe` that relies on Data Transfer Objects (DTOs).
+
+### Your Responsibility:
+
+- For any `POST` or `PUT` request, you **must** create a DTO class for the request body.
+- Use `class-validator` decorators (`@IsString`, `@IsEmail`, `@MinLength`, etc.) on the DTO properties to define the validation rules.
+- For complex rules like password strength, use the established custom validators (e.g., `@IsPassword`) or create the new validators.
+
+### Rules:
+
+- **No Raw Bodies**: Never use `@Body()` without a DTO class. This bypasses all validation.
+- **Trust the Pipe**: The global `ValidationPipe` is already configured to strip unexpected properties (`whitelist: true`) and reject requests with unknown fields (`forbidNonWhitelisted: true`). Your only job is to provide a well-defined DTO.
+
+## 3. Handling Errors
+
+To ensure consistent and secure error responses, this project uses a centralized `HttpExceptionFilter`.
+
+### Rule:
+
+- **Avoid `try-catch` for HTTP Errors**: Do not use `try-catch` blocks in your controllers or services to handle operations that are expected to fail with a standard HTTP error (e.g., entity not found, bad request). Instead, throw the appropriate `HttpException` (e.g., `new NotFoundException()`) and let the global filter handle it. A `try-catch` block is only acceptable if you need to perform a specific action (like a database transaction rollback) before re-throwing the exception.

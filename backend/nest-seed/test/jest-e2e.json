@@ -1,0 +1,22 @@
+{
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "testRegex": ".e2e-spec.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "^@snap/core$": "<rootDir>/../__mocks__/@snap/core",
+    "^@snap/core/(.*)$": "<rootDir>/../__mocks__/@snap/core",
+    "^@snap/snap$": "<rootDir>/../libs/snap/src",
+    "^@snap/snap/(.*)$": "<rootDir>/../libs/snap/src/$1"
+  },
+  "transformIgnorePatterns": [
+    "/node_modules/(?!uuid)"
+  ]
+}

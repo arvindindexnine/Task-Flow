@@ -1,0 +1,29 @@
+{
+  "header": {
+    "home": "Accueil",
+    "tasks": "Tâches",
+    "dashboard": "Tableau de bord",
+    "changePassword": "Changer le mot de passe",
+    "signOut": "Se déconnecter",
+    "adminDashboard": "ALLER AU TABLEAU DE BORD ADMIN",
+    "admin": "ADMIN"
+  },
+  "language": {
+    "select": "Choisir la langue",
+    "en": "Anglais",
+    "fr": "Français"
+  },
+  "actions": {
+    "switchLanguage": "Changer de langue",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "create": "Créer",
+    "prev": "Précédent",
+    "next": "Suivant"
+  },
+  "errors": {
+    "somethingWentWrong": "Quelque chose s'est mal passé"
+  }
+}

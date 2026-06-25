@@ -1,0 +1,44 @@
+services:
+  devcontainer:
+    container_name: NestjsSeed
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspace:cached
+      - ~/.gitconfig:/workspace/.devcontainer/.gitconfig
+    network_mode: service:postgres
+    command: sleep infinity
+    working_dir: /workspace
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    privileged: true
+
+  postgres:
+    container_name: PostgerSQL
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: postgres
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - '5433:5432'
+
+  pg_admin:
+    container_name: PgAdmin4
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=pgadmin4
+    ports:
+      - 5050:80
+    depends_on:
+      - postgres
+
+
+volumes:
+  postgres-data:

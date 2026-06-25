@@ -1,0 +1,25 @@
+{
+  "title": "Tableau de bord",
+  "welcome": "Bon retour,",
+  "overview": "Voici l'aperçu de vos tâches.",
+  "stats": {
+    "total": "Total des tâches",
+    "pending": "Tâches en attente",
+    "inProgress": "Tâches en cours",
+    "completed": "Tâches terminées"
+  },
+  "charts": {
+    "frequency": "Tâches créées au fil du temps",
+    "status": "Statut actuel des tâches",
+    "frequencyLabel": "Tâches créées"
+  },
+  "admin": {
+    "title": "Utilisateurs",
+    "addUser": "Ajouter un utilisateur",
+    "table": {
+      "name": "Nom",
+      "email": "Email",
+      "role": "Rôle"
+    }
+  }
+}

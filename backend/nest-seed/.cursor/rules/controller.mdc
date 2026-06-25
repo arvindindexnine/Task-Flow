@@ -1,0 +1,137 @@
+---
+globs: *.controller.ts
+description: Rule for defining the Controller and HTTP endpoints and convention to use in the Controller files
+---
+
+# API Naming Conventions
+
+This guide defines naming conventions specifically for REST API endpoints, controllers, and HTTP methods in NestJS applications.
+
+## RESTful Endpoint Patterns
+
+Follow standard REST conventions:
+
+```typescript
+@Controller('users')
+export class UserController {
+  @Get() // GET /users
+  findAll() {}
+
+  @Get(':id') // GET /users/:id
+  findOne(@Param('id') id: string) {}
+
+  @Post() // POST /users
+  create(@Body() createUserDto: CreateUserDto) {}
+
+  @Put(':id') // PUT /users/:id
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {}
+
+  @Patch(':id') // PATCH /users/:id
+  partialUpdate(@Param('id') id: string, @Body() updates: Partial<UpdateUserDto>) {}
+
+  @Delete(':id') // DELETE /users/:id
+  remove(@Param('id') id: string) {}
+}
+```
+
+## Nested Resources
+
+For nested resources, use clear endpoint structures:
+
+```typescript
+@Controller('users/:userId/orders')
+export class UserOrderController {
+  @Get() // GET /users/:userId/orders
+  findUserOrders(@Param('userId') userId: string) {}
+
+  @Post() // POST /users/:userId/orders
+  createUserOrder(@Param('userId') userId: string, @Body() orderData: CreateOrderDto) {}
+}
+```
+
+## Query Parameters
+
+Use DTOs with validation instead of individual query parameters for better type safety and validation:
+
+```typescript
+import { IsAdvancedString } from '@snap/core';
+import { IsEnum, IsInt, IsIn, IsOptional, Max, Min } from 'class-validator';
+import { Type } from 'class-transformer';
+
+// Query DTO with validation
+export class FindUsersQueryDto {
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  page?: number = 1;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(100)
+  limit?: number = 10;
+
+  @IsOptional()
+  @IsAdvancedString({ minLength: 1, maxLength: 20, message: 'Sort by must be a valid string' })
+  @IsIn(['createdAt', 'updatedAt', 'name', 'email'])
+  sortBy?: string = 'createdAt';
+
+  @IsOptional()
+  @IsIn(['ASC', 'DESC'])
+  sortOrder?: 'ASC' | 'DESC' = 'DESC';
+
+  @IsOptional()
+  @IsEnum(UserStatus)
+  status?: UserStatus;
+
+  @IsOptional()
+  @IsAdvancedString({ minLength: 1, maxLength: 100, message: 'Search term must be a valid string' })
+  search?: string;
+}
+
+// Controller usage
+@Get()
+findAll(@Query() query: FindUsersQueryDto) {
+  // query is validated and typed (validation pipe applied globally)
+}
+```
+
+**Benefits:**
+
+- Type safety and IntelliSense support
+- Automatic validation with clear error messages
+- Reusable across multiple endpoints
+- Consistent parameter handling
+
+## Custom Actions
+
+For non-CRUD operations, use descriptive action names:
+
+```typescript
+@Controller('users')
+export class UserController {
+  @Post(':id/activate') // POST /users/:id/activate
+  activateUser(@Param('id') id: string) {}
+
+  @Post(':id/deactivate') // POST /users/:id/deactivate
+  deactivateUser(@Param('id') id: string) {}
+
+  @Post(':id/reset-password') // POST /users/:id/reset-password
+  resetPassword(@Param('id') id: string) {}
+
+  @Get(':id/profile') // GET /users/:id/profile
+  getUserProfile(@Param('id') id: string) {}
+}
+```
+
+## Swagger Documentation
+
+- Do not add the swagger documentation decorators for the Error Response format. Use Swagger only for provide documentation which is not implicitly available with default Nest structure.
+
+## Response Patterns
+
+Use consistent response method naming:
+
+TODO - Define it properly. Until use whatever consistent is in Project

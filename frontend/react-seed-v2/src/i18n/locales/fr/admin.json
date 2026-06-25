@@ -1,0 +1,66 @@
+{
+    "title": "Tableau de bord administrateur",
+    "subtitle": "Gérer les utilisateurs et superviser l'activité du système",
+    "stats": {
+        "totalUsers": "Nombre total d'utilisateurs",
+        "totalTasks": "Nombre total de tâches",
+        "activeMembers": "Membres actifs"
+    },
+    "management": {
+        "title": "Gestion des utilisateurs",
+        "description": "Cliquez sur un utilisateur pour voir ses tâches actuelles en mode lecture seule.",
+        "table": {
+            "user": "Utilisateur",
+            "role": "Rôle",
+            "status": "Statut",
+            "tasks": "Tâches",
+            "actions": "Actions",
+            "noUsers": "Aucun utilisateur trouvé."
+        },
+        "details": "Détails",
+        "userTasks": "Tâches de {{name}}",
+        "deleteConfirm": "Êtes-vous sûr de vouloir supprimer l'utilisateur {{email}} ? Cette action est irréversible.",
+        "deleteSuccess": "Utilisateur supprimé avec succès",
+        "deleteError": "Échec de la suppression de l'utilisateur",
+        "roles": {
+            "member": "Membre",
+            "admin": "Administrateur",
+            "super_admin": "Super Administrateur"
+        },
+        "status": {
+            "approved": "Approuvé",
+            "pending": "En attente",
+            "active": "Actif",
+            "rejected": "Refusé"
+        },
+        "filters": "FILTRES"
+    },
+    "approval": {
+        "title": "Demandes d'administrateur en attente",
+        "description": "Les nouvelles inscriptions d'administrateurs nécessitent votre approbation.",
+        "pending": "EN ATTENTE",
+        "approve": "Approuver",
+        "reject": "Rejeter",
+        "success": "Demande d'administrateur {{status}}",
+        "error": "L'opération a échoué"
+    },
+    "create": {
+        "button": "Ajouter un utilisateur",
+        "title": "Créer un nouvel utilisateur",
+        "labels": {
+            "name": "Nom complet",
+            "email": "Adresse e-mail",
+            "role": "Rôle",
+            "password": "Mot de passe initial",
+            "confirmPassword": "Confirmer le mot de passe"
+        },
+        "placeholders": {
+            "name": "Jean Dupont",
+            "email": "email@exemple.com",
+            "role": "Sélectionnez un rôle"
+        },
+        "submit": "Créer le compte",
+        "success": "Utilisateur créé avec succès",
+        "error": "Échec de la création de l'utilisateur"
+    }
+}

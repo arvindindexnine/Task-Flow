@@ -1,0 +1,316 @@
+---
+alwaysApply: true
+---
+
+# Core Naming Conventions
+
+This guide defines mandatory naming conventions for variables, functions, classes, and general code elements. Consistent naming improves code readability, maintainability, and team collaboration.
+
+## Core Principles
+
+### 1. Use English Language Only
+
+All variables, functions, classes, and files must use English names.
+
+```typescript
+// ❌ Bad
+const primerNombre = 'John';
+const amigos = ['Kate', 'John'];
+
+// ✅ Good
+const firstName = 'John';
+const friends = ['Kate', 'John'];
+```
+
+### 2. Follow camelCase Convention
+
+Use **camelCase** for variables, functions, properties. Use **PascalCase** for classes, interfaces, types.
+
+```typescript
+// ❌ Bad
+const page_count = 5;
+const ShouldUpdate = true;
+
+// ✅ Good
+const pageCount = 5;
+const shouldUpdate = true;
+const userService = new UserService();
+```
+
+### 3. S-I-D Rule: Short, Intuitive, Descriptive
+
+Names must be:
+
+- **Short**: Easy to type and remember
+- **Intuitive**: Read naturally, close to common speech
+- **Descriptive**: Clearly reflect what they do or contain
+
+```typescript
+// ❌ Bad
+const a = 5; // Too short, not descriptive
+const isPaginatable = a > 10; // Unnatural language
+
+// ✅ Good
+const postCount = 5;
+const hasPagination = postCount > 10;
+const shouldPaginate = postCount > 10;
+```
+
+## Variable Naming Rules
+
+### Boolean Variables
+
+Use clear prefixes that indicate true/false nature:
+
+```typescript
+// ✅ Use 'is' for characteristics or state
+const isActive = true;
+const isLoading = false;
+const isValid = user.email.includes('@');
+
+// ✅ Use 'has' for possession
+const hasPermission = user.roles.includes('ADMIN');
+const hasErrors = validationErrors.length > 0;
+
+// ✅ Use 'should' for conditional actions
+const shouldUpdate = currentVersion !== latestVersion;
+const shouldShowModal = !user.hasSeenWelcome;
+
+// ✅ Use 'can' for capabilities
+const canDelete = user.role === 'ADMIN';
+const canEdit = user.id === post.authorId;
+```
+
+### Collections and Counts
+
+Use singular/plural appropriately:
+
+```typescript
+// ❌ Bad
+const friends = 'Bob'; // Should be singular
+const friend = ['Bob', 'Tony']; // Should be plural
+
+// ✅ Good
+const friend = 'Bob';
+const friends = ['Bob', 'Tony'];
+const userCount = 42;
+const activeUsers = users.filter((u) => u.isActive);
+```
+
+### Boundaries and Limits
+
+Use `min/max` prefixes for boundaries:
+
+```typescript
+// ✅ Good
+const minPasswordLength = 8;
+const maxRetryAttempts = 3;
+const minPrice = 0;
+const maxFileSize = 10 * 1024 * 1024; // 10MB
+```
+
+## Function Naming Rules
+
+### A/HC/LC Pattern
+
+Follow the pattern: `prefix? + action + highContext + lowContext?`
+
+| Function Name          | Prefix | Action  | High Context | Low Context |
+| ---------------------- | ------ | ------- | ------------ | ----------- |
+| `getUser`              | -      | get     | User         | -           |
+| `getUserMessages`      | -      | get     | User         | Messages    |
+| `shouldDisplayMessage` | should | Display | Message      | -           |
+| `isPaymentEnabled`     | is     | -       | Payment      | Enabled     |
+
+### Standard Action Verbs
+
+#### `get` - Access immediate data
+
+```typescript
+getUserFullName(): string {
+  return `${this.firstName} ${this.lastName}`;
+}
+```
+
+#### `fetch` - Retrieve data asynchronously
+
+```typescript
+async fetchUserById(id: string): Promise<User> {
+  return this.userRepository.findOne({ where: { id } });
+}
+```
+
+#### `set` - Assign values declaratively
+
+```typescript
+setUserStatus(userId: string, status: UserStatus): void {
+  this.userStatusMap.set(userId, status);
+}
+```
+
+#### `reset` - Return to initial state
+
+```typescript
+resetPassword(userId: string): void {
+  this.setUserPassword(userId, this.generateTempPassword());
+}
+```
+
+#### `create` - Generate new entities
+
+```typescript
+async createUser(userData: CreateUserDto): Promise<User> {
+  return this.userRepository.save(userData);
+}
+```
+
+#### `remove` - Take away from collection
+
+```typescript
+removeUserFromRole(userId: string, roleId: string): void {
+  this.userRoles.delete(`${userId}-${roleId}`);
+}
+```
+
+#### `delete` - Permanently destroy
+
+```typescript
+async deleteUser(id: string): Promise<void> {
+  await this.userRepository.delete(id);
+}
+```
+
+#### `update` - Modify existing data
+
+```typescript
+async updateUser(id: string, updates: UpdateUserDto): Promise<User> {
+  return this.userRepository.update(id, updates);
+}
+```
+
+#### `validate` - Check correctness
+
+```typescript
+validateEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+```
+
+## Class and File Naming
+
+### NestJS Components
+
+Follow NestJS conventions with descriptive suffixes:
+
+```typescript
+// Controllers
+export class UserController {} // user.controller.ts
+export class AuthController {} // auth.controller.ts
+
+// Services
+export class UserService {} // user.service.ts
+export class EmailService {} // email.service.ts
+
+// DTOs
+export class CreateUserDto {} // user.dto.ts
+export class UpdateUserDto {} // user.dto.ts
+export class UserResponseDto {} // user.dto.ts
+
+// Guards
+export class JwtAuthGuard {} // jwt-auth.guard.ts
+export class PermissionGuard {} // permission.guard.ts
+
+// Commands & Queries (CQRS)
+export class CreateUserCommand {} // create-user.command.ts
+export class GetUserByEmailQuery {} // get-user-by-email.query.ts
+```
+
+### Avoid Context Duplication
+
+Don't repeat the class context in method names:
+
+```typescript
+// ❌ Bad - duplicates context
+class UserService {
+  getUserById(id: string) {} // "User" is already in class name
+  createNewUser(data: any) {} // "User" is redundant
+}
+
+// ✅ Good - clean method names
+class UserService {
+  findById(id: string) {}
+  create(data: CreateUserDto) {}
+  update(id: string, data: UpdateUserDto) {}
+  delete(id: string) {}
+}
+```
+
+## Constants and Enums
+
+### Constants
+
+Use SCREAMING_SNAKE_CASE for constants:
+
+```typescript
+// ✅ Good
+const MAX_RETRY_ATTEMPTS = 3;
+const DEFAULT_PAGE_SIZE = 20;
+const JWT_EXPIRY_TIME = '24h';
+const BCRYPT_SALT_ROUNDS = 10;
+```
+
+### Enums
+
+Use PascalCase for enum names and SCREAMING_SNAKE_CASE for values:
+
+```typescript
+// ✅ Good
+enum UserStatus {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+  SUSPENDED = 'SUSPENDED',
+  PENDING_VERIFICATION = 'PENDING_VERIFICATION',
+}
+
+enum HttpStatusCode {
+  OK = 200,
+  CREATED = 201,
+  BAD_REQUEST = 400,
+  UNAUTHORIZED = 401,
+  NOT_FOUND = 404,
+}
+```
+
+## Common Mistakes to Avoid
+
+### Don't Use Contractions
+
+```typescript
+// ❌ Bad: getUsrNme(), calcTtl()
+// ✅ Good: getUserName(), calculateTotal()
+```
+
+### Don't Use Abbreviations
+
+```typescript
+// ❌ Bad: usr, cfg, btn
+// ✅ Good: user, config, button
+```
+
+### Reflect Expected Results
+
+```typescript
+// ❌ Bad - confusing logic
+const isEnabled = itemCount <= 3;
+if (!isEnabled) {
+  /* awkward */
+}
+
+// ✅ Good - clear intent
+const isDisabled = itemCount <= 3;
+if (isDisabled) {
+  /* natural */
+}
+```
+
+Following these core naming conventions ensures your code is readable, maintainable, and follows industry best practices.

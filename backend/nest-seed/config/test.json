@@ -1,0 +1,19 @@
+{
+    "jwt": {
+        "secret": "test-secret-key-for-testing-only",
+        "accessTokenOptions": {
+            "expiresIn": 3600
+        },
+        "refreshTokenOptions": {
+            "expiresIn": 1210000
+        },
+        "grantTypes": {
+            "accessGrant": "access",
+            "refreshGrant": "refresh"
+        }
+    },
+    "bcrypt": {
+        "saltRounds": 1
+    },
+    "roleBasedAccess": []
+}

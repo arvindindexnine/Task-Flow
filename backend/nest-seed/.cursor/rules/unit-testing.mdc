@@ -1,0 +1,99 @@
+---
+globs: *.service.spec.ts
+description: Unit tests conventions
+---
+
+Defines the standard practice for writing unit tests. All new code must be accompanied by tests that adhere to these rules.
+
+# The Golden Rule: Use `jest-when` for Mocking
+
+- Always use the `jest-when` library to make mocking more readable and robust. **Do not use `jest.spyOn().mockResolvedValue()` or similar default Jest mock implementations.** All mocks for function return values must be set up with `when()`.
+
+- When using jest-when's `when()` to mock functions with specific parameters, the mock will only trigger for exact parameter matches. If different parameters are passed during execution, the mock will return `undefined` and may cause test failures and which is expected for to ensure correctness of the test case
+
+**Sample test file**
+
+```typescript
+describe('UserService', () => {
+  let service: UserService;
+  let userRepository: UserRepository;
+
+  it('should return a user when a valid id is provided', async () => {
+    // Arrange
+    const mockUser = { id: 5, name: 'Test' } as User;
+    when(userRepository.findById).calledWith(5).mockResolvedValue(mockUser);
+
+    // Act
+    const result = await service.findOne(5);
+
+    // Assert
+    expect(result).toEqual(mockUser);
+    expect(userRepository.findById).toHaveBeenCalledWith(1);
+  });
+});
+```
+
+# What NOT to Test - Avoid Unnecessary Tests
+
+## Do not write test cases for functions that just return values by calling other functions
+
+Simple pass-through functions or getters that don't contain business logic should not be tested.
+
+#### ❌ Bad - Don't test simple pass-through methods:
+
+```typescript
+// Service method that just delegates
+class UserService {
+  constructor(private userRepository: UserRepository) {}
+
+  async findById(id: string): Promise<User> {
+    return this.userRepository.findById(id); // Just passes through
+  }
+}
+
+// Don't write this test - it adds no value
+it('should call repository findById', async () => {
+  const mockUser = { id: '1', name: 'John' };
+  when(userRepository.findById).calledWith('1').mockResolvedValue(mockUser);
+
+  const result = await userService.findById('1');
+
+  expect(result).toEqual(mockUser);
+  expect(userRepository.findById).toHaveBeenCalledWith('1');
+});
+```
+
+#### ❌ Bad - Strictly Do not create mock stub with expect.any(T)
+
+```typescript
+it('should call repository findById', async () => {
+  const mockUser = { id: '1', name: 'John' };
+  //Do not create this kind of stub as it can lead to inaccurate test cases which just increase the coverage but does not add any value to test cases.
+  when(userRepository.findById).calledWith(expect.any(number)).mockResolvedValue(mockUser);
+
+  const result = await userService.findById('1');
+
+  expect(result).toEqual(mockUser);
+  expect(userRepository.findById).toHaveBeenCalledWith('1');
+});
+```
+
+#### ✅ Good - TestedWith('test@example.com').mockResolvedValue(exist{ingUser);
+
+await expect(userService.createUser({test@example.com', password: 'pass .rejects.toThrow(Conflict
+
+### Other scenarios to avoid testing:
+
+- **Simple getters/setters**: `get name() { return this.userName; }`
+- **Direct property access**: `getConfig() { return this.config; }`
+- **Framework decorators**: Don't test that `@Injectable()` works
+- **Third-party library behavior**: Don't test that `bcrypt.hash()` works correctly
+- **TypeORM entity relationships**: Don't test that `@ManyToOne` works
+
+### Focus your tests on:
+
+- **Business logic and calculations**
+- **Conditional flows and branching**
+- **Error handling and validation**
+- **Data transformation and processing**
+- **Integration**

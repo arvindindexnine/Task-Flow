@@ -1,0 +1,71 @@
+---
+description: The official project structure and code location guide for the Lentra backend.
+---
+
+# Where to Put Your Code
+
+This document defines the mandatory project structure for the Lentra backend. Following these rules ensures that the codebase remains organized, consistent, and easy to navigate.
+
+## The `src` Directory Structure
+
+All new feature development and business logic resides within the `src` directory.
+
+```
+src/
+├── app.module.ts           # The root application module
+├── main.ts                 # The application entry point
+│
+├── constants/              # Global constants and enums (e.g., RoleType)
+├── controllers/            # DEPRECATED: All controllers belong inside a feature module
+├── dto/                    # DEPRECATED: All DTOs belong inside a feature module
+│
+├── modules/                # **ALL NEW FEATURES GO HERE**
+│   └── user/               # Example: The "User" feature module
+│       ├── commands/       # CQRS Commands for write operations
+│       ├── queries/        # CQRS Queries for read operations
+│       │
+│       ├── user.controller.ts   # Handles HTTP requests for Users
+│       ├── user.service.ts      # Contains business logic for Users
+|       |-- user.service.spec.ts #Contains the Unit tests of Service classes
+│       ├── user.repository.ts   # Handles database access for Users
+│       ├── user.entity.ts       # The TypeORM database entity for Users
+│       ├── user.dto.ts          # Data Transfer Objects for Users
+│       └── user.module.ts       # The NestJS module definition
+│
+└── migration/              # Database migrations (see database-migrations.mdc)
+```
+
+## Core Rules for Code Location
+
+1.  **All New Code Belongs in a Feature Module**: Every new feature must be encapsulated within its own directory inside `src/modules`. For example, if you are building a "Products" feature, you must create a `src/modules/products` directory.
+
+2.  **No More Top-Level `controllers` or `dto`**: The global `src/controllers` and `src/dto` directories are considered deprecated. All new controllers and DTOs **must** be placed inside their corresponding feature module directory (e.g., `src/modules/user/user.controller.ts`).
+
+3.  **Follow the Module Component Structure**: Within each feature module, you must adhere to the standard component structure:
+    - **Controllers (`*.controller.ts`)**: Handle HTTP requests.
+    - **Services (`*.service.ts`)**: Contain business logic.
+    - **Unit tests of Services (`*.service.spec.ts`)**: Contain business logic.
+    - **Repositories (`*.repository.ts`)**: Handle database interaction.
+    - **Entities (`*.entity.ts`)**: Define database tables.
+    - **DTOs (`*.dto.ts`)**: Define data shapes for requests and responses.
+    - **CQRS (`commands/`, `queries/`)**: For complex write/read operations.
+
+## New Feature Checklist
+
+When creating a new feature (e.g., "Products"), follow these steps:
+
+1.  **Create the Module Directory**:
+    - `mkdir src/modules/products`
+
+2.  **Create the Core Component Files**:
+    - `touch src/modules/products/products.module.ts`
+    - `touch src/modules/products/products.controller.ts`
+    - `touch src/modules/products/products.service.ts`
+    - `touch src/modules/products/products.repository.ts`
+    - `touch src/modules/products/products.entity.ts`
+    - `touch src/modules/products/products.dto.ts`
+    - `touch src/modules/products/products.service.spec.ts`
+
+3.  **Register the New Module**: Add your `ProductsModule` to the `imports` array in the root `src/app.module.ts`.
+
+4.  **Create the Database Table**: After defining your `products.entity.ts`, run the migration generation command to create the database table (see `database-migrations.mdc`).

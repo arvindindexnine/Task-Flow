@@ -1,0 +1,28 @@
+---
+globs: *.repository.ts
+description: Practices to follow in TypeOR repository.
+---
+
+# Repository Naming
+
+Use descriptive names with `Repository` suffix.
+
+Create the repositories with following structure - Extends IGenericRepository<T>.
+
+```typescript
+// ✅ Repository naming
+@Injectable()
+export class UserRepository extends IGenericRepository<User> {
+  constructor(@InjectRepository(User) repository: Repository<User>) {
+    super(repository);
+  }
+}
+```
+
+# Guidelines for Repository Methods
+
+- **Avoid `save()` method** - Use `insert()` for new entities and `update()` for existing entities instead. `save()` performs unnecessary SELECT queries to check existence, causing 2x database load and network latency. Only use `save()` when you genuinely need the insert-or-update functionality.
+
+- **Prefer built-in repository methods** - Use `find()`, `findOne()`, `findBy()` over `queryBuilder` for better type safety and performance. Only use `queryBuilder` for complex joins or aggregations that built-in methods cannot handle.
+
+- **Prefer existing repository methods** - Use built-in TypeORM methods (`find`, `save`, `delete`) or generic repository methods before creating custom methods. This reduces code duplication and leverages tested functionality.

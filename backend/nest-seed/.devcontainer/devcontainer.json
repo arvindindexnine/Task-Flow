@@ -1,0 +1,66 @@
+{
+  "name": "Nestjs Seed Container",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "devcontainer",
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "donjayamanne.git-extension-pack",
+        "eamodio.gitlens",
+        "ms-vscode.vscode-typescript-next",
+        "xabikos.javascriptsnippets",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "ms-azuretools.vscode-docker",
+        "ms-vscode.vscode-typescript-tslint-plugin",
+        "msjsdiag.debugger-for-chrome"
+      ],
+      "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash",
+        "files.autoSave": "off",
+        "git.enabled": true,
+        "git.autofetch": true,
+        "git.autorefresh": true,
+        "git.confirmSync": false,
+        "git.enableSmartCommit": true,
+        "git.path": "/usr/bin/git",
+        "gitlens.gitExplorer.autoRefresh": true,
+        "gitlens.gitExplorer.files.layout": "list",
+        "gitlens.gitExplorer.statusFileCommits.enabled": true,
+        "gitlens.gitExplorer.statusFileCommits.refreshOnFocus": true,
+        "gitlens.gitExplorer.files.compact": false,
+        "files.watcherExclude": {
+          "**/node_modules/**": true,
+          "**/.git/objects/**": true,
+          "**/.git/subtree-cache/**": true,
+          "**/build/**": true,
+          "**/dist/**": true
+        }
+      }
+    }
+  },
+  "forwardPorts": [
+    8000,
+    5433,
+    5050
+  ],
+  "portsAttributes": {
+    "8000": {
+      "label": "Seed Backend",
+      "onAutoForward": "notify"
+    },
+    "5433": {
+      "label": "PostgreSQL DB",
+      "onAutoForward": "notify"
+    },
+    "5050": {
+      "label": "Pg Admin 4",
+      "onAutoForward": "notify"
+    }
+  },
+  "remoteUser": "node",
+  "containerUser": "node",
+  "initializeCommand": "sudo rm -rf ~/.gitconfig && sudo cp /mnt/c/Users/$(/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -Command \"[System.Environment]::UserName\" | tr -d '\r')/.gitconfig ~/",
+  "postCreateCommand": "sudo sysctl fs.inotify.max_user_watches=524288 && git config --global --add safe.directory /workspace && git config --global core.autocrlf input && sudo chmod +x /workspace/.devcontainer/setup.sh && sudo sh /workspace/.devcontainer/setup.sh && npm start"
+}

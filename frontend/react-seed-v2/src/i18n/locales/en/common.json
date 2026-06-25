@@ -1,0 +1,29 @@
+{
+  "header": {
+    "home": "Home",
+    "tasks": "Tasks",
+    "dashboard": "Dashboard",
+    "changePassword": "Change Password",
+    "signOut": "Sign Out",
+    "adminDashboard": "GO TO ADMIN DASHBOARD",
+    "admin": "ADMIN"
+  },
+  "language": {
+    "select": "Select language",
+    "en": "English",
+    "fr": "French"
+  },
+  "actions": {
+    "switchLanguage": "Switch Language",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "create": "Create",
+    "prev": "Prev",
+    "next": "Next"
+  },
+  "errors": {
+    "somethingWentWrong": "Something went wrong"
+  }
+}

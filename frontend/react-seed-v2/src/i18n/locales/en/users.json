@@ -1,0 +1,17 @@
+{
+  "addUser": {
+    "title": "Add User",
+    "name": "Full Name",
+    "email": "Email Address",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "role": "Role",
+    "selectRole": "Select a role",
+    "submit": "Add User",
+    "success": "User added successfully",
+    "roles": {
+      "member": "Member",
+      "admin": "Admin"
+    }
+  }
+} 

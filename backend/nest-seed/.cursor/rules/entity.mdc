@@ -1,0 +1,81 @@
+---
+globs: *.entity.ts
+description: Database naming conventions for entities, database fields. Ensures consistent database design and TypeORM integration following best practices.
+---
+
+# Database Entity Naming Conventions
+
+## Column Naming
+
+Use camelCase for entity properties and snake case for actual database column name, let TypeORM handle database column conversion:
+
+```typescript
+@Entity('users')
+export class User extends Audit {
+  @Column({ name: 'first_name' })
+  firstName: string; // maps to first_name in database
+
+  @Column({ name: 'last_name' })
+  lastName: string; // maps to last_name in database
+
+  @Column({ name: 'email_verified_at' })
+  emailVerifiedAt: Date; // maps to email_verified_at
+
+  @Column({ name: 'is_active' })
+  isActive: boolean; // maps to is_active
+}
+```
+
+## Relationship Naming
+
+Use clear, descriptive names for relationships:
+
+```typescript
+@Entity('users')
+export class User {
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
+
+  @OneToOne(() => UserProfile, (profile) => profile.user)
+  profile: UserProfile;
+
+  @ManyToMany(() => Role, (role) => role.users)
+  @JoinTable({
+    name: 'user_roles',
+    joinColumn: { name: 'user_id' },
+    inverseJoinColumn: { name: 'role_id' },
+  })
+  roles: Role[];
+}
+
+@Entity('orders')
+export class Order {
+  @ManyToOne(() => User, (user) => user.orders)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
+
+  @OneToMany(() => OrderItem, (item) => item.order)
+  orderItems: OrderItem[];
+}
+```
+
+## Index and Constraint Naming
+
+Use descriptive names for indexes and constraints:
+
+```typescript
+@Entity('users')
+@Index('idx_users_email', ['email'])
+@Index('idx_users_status_created', ['isActive', 'createdAt'])
+@Unique('uq_users_email', ['email'])
+export class User {
+  @Column()
+  email: string;
+
+  @Column()
+  isActive: boolean;
+
+  @CreateDateColumn()
+  createdAt: Date;
+}
+```

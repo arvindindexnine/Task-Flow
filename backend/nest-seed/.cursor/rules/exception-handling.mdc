@@ -1,0 +1,88 @@
+---
+alwaysApply: true
+---
+
+# Exception Handling Rules
+
+## Core Principles
+
+### 1. No Try-Catch in Service Files
+
+- **AVOID** using try-catch blocks in service files unless dealing with checked exceptions that must be handled
+- The application has a global exception filter (`GlobalExceptionsFilter`) that handles all exceptions centrally
+- Let exceptions bubble up to be caught by the global filter
+
+### 2. Use Business Exception Class
+
+- Always use the `BusinessException` class (extends `HttpException`) for throwing business logic errors
+- Import from: `libs/snap/src/exception/seed.exception.ts`
+
+```typescript
+import { BusinessException } from '@libs/snap/exception/seed.exception';
+```
+
+## Exception Throwing Examples
+
+### L Wrong - Using try-catch in controller, service, repository.
+
+```typescript
+// Never DO THIS in service files
+async getUser(id: string) {
+  try {
+    const user = await this.userRepository.findById(id);
+    return user;
+  } catch (error) {
+    throw new BusinessException('User not found', 404);
+  }
+}
+```
+
+Even never use the generic try catch in the service and controller files.
+
+###  Correct - Let exceptions bubble up
+
+```typescript
+// DO THIS - let the global filter handle exceptions
+async getUser(id: string) {
+  const user = await this.userRepository.findById(id);
+  if (!user) {
+    throw new BusinessException('User not found', 404);
+  }
+  return user;
+}
+```
+
+###  Correct Exception Throwing Patterns
+
+```typescript
+// Resource not found
+throw new BusinessException('Customer not found', 404);
+```
+
+## When Try-Catch is Allowed
+
+Only use try-catch when:
+
+1. Handling checked exceptions that require specific handling
+2. Wrapping third-party library calls that throw non-HTTP exceptions
+3. Cleaning up resources (with finally blocks)
+
+```typescript
+// Acceptable use case
+async uploadFile(file: Express.Multer.File) {
+  try {
+    await this.s3Service.upload(file);
+  } catch (s3Error) {
+    // Convert S3 error to business exception
+    throw new BusinessException('File upload failed', 500);
+  }
+}
+```
+
+## Summary
+
+1. Use `BusinessException` for all business logic errors
+2. Choose appropriate HTTP status codes based on the scenario
+3. Avoid try-catch in controller, service and repository files - let the global filter handle exceptions
+4. Provide clear, descriptive error messages
+5. Let exceptions bubble up to the global exception filter# Exception Handling Rules

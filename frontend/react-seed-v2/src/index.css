@@ -1,0 +1,159 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Centred page container — max 1280px */
+@layer utilities {
+  .container {
+    width: 100%;
+    max-width: 1280px;
+    margin-inline: auto;
+  }
+}
+
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 1rem;
+  --background: transparent;
+  --foreground: #ffffff;
+  --card: rgba(0, 0, 0, 0.4);
+  --card-foreground: #ffffff;
+  --popover: rgba(0, 0, 0, 0.8);
+  --popover-foreground: #ffffff;
+  --primary: #5606ff;
+  --primary-foreground: #ffffff;
+  --secondary: #fe8989;
+  --secondary-foreground: #000000;
+  --muted: rgba(255, 255, 255, 0.1);
+  --muted-foreground: rgba(255, 255, 255, 0.6);
+  --accent: rgba(86, 6, 255, 0.2);
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.05);
+  --ring: #5606ff;
+  --sidebar: rgba(0, 0, 0, 0.6);
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #5606ff;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: rgba(86, 6, 255, 0.2);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: #5606ff;
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-black/40 backdrop-blur-xl border border-white/10;
+  }
+
+  .glass-card {
+    @apply bg-black/30 backdrop-blur-md border border-white/5 hover:border-white/20 transition-all duration-300;
+  }
+
+  .glass-dark {
+    @apply bg-black/60 backdrop-blur-2xl border border-white/10;
+  }
+
+  .text-brand-gradient {
+    @apply bg-gradient-to-r from-[#5606ff] to-[#fe8989] bg-clip-text text-transparent outline-none;
+  }
+
+  .animate-bounce-subtle {
+    animation: bounce-subtle 3s ease-in-out infinite;
+  }
+}
+
+@keyframes bounce-subtle {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  button,
+  [role="button"],
+  a,
+  select,
+  label[for],
+  [type="checkbox"],
+  [type="radio"] {
+    cursor: pointer;
+  }
+
+  /* disabled state — keep default cursor */
+  button:disabled,
+  [role="button"][aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+
+  body {
+    @apply bg-transparent text-foreground min-h-screen selection:bg-[#5606ff]/30;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  /* Move native date picker icon to the right */
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    position: absolute;
+    right: 12px;
+    padding: 0;
+    margin: 0;
+    opacity: 0.8;
+    filter: invert(1);
+    transition: opacity 0.2s;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+  }
+
+  input[type="date"] {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+}

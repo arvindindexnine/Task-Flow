@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "builder": "swc",
+    "typeCheck": true,
+    "webpack": true
+  },
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "projects": {
+    "snap": {
+      "type": "library",
+      "root": "libs/snap",
+      "entryFile": "index",
+      "sourceRoot": "libs/snap/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/snap/tsconfig.lib.json"
+      }
+    }
+  }
+}

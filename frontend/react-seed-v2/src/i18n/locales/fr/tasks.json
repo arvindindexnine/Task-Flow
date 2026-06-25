@@ -1,0 +1,55 @@
+{
+    "title": "Tâches",
+    "noTasks": "Aucune tâche trouvée",
+    "noTasksDescription": "Créez une nouvelle tâche ou ajustez vos filtres.",
+    "noTasksMatchFilters": "Aucune tâche ne correspond aux filtres sélectionnés.",
+    "noDescription": "Pas de description",
+    "noDate": "Pas de date",
+    "table": {
+        "title": "Titre",
+        "description": "Description",
+        "status": "Statut",
+        "priority": "Priorité",
+        "dueDate": "Date d'échéance",
+        "actions": "Actions"
+    },
+    "status": {
+        "todo": "À faire",
+        "inProgress": "En cours",
+        "completed": "Terminé"
+    },
+    "priority": {
+        "low": "Faible",
+        "medium": "Moyenne",
+        "high": "Élevée"
+    },
+    "form": {
+        "addTask": "Ajouter une tâche",
+        "editTask": "Modifier la tâche",
+        "labels": {
+            "title": "Titre de la tâche",
+            "description": "Description",
+            "status": "Statut",
+            "priority": "Priorité",
+            "dueDate": "Date d'échéance"
+        },
+        "placeholders": {
+            "title": "Entrez le titre de la tâche",
+            "description": "Entrez les détails de la tâche"
+        }
+    },
+    "filters": {
+        "search": "Rechercher des tâches...",
+        "status": "Filtrer par statut",
+        "priority": "Filtrer par priorité",
+        "all": "Tout",
+        "reset": "Réinitialiser les filtres"
+    },
+    "messages": {
+        "updateSuccess": "Tâche mise à jour avec succès.",
+        "createSuccess": "Tâche créée avec succès.",
+        "deleteSuccess": "Tâche supprimée.",
+        "deleteError": "Échec de la suppression de la tâche.",
+        "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cette tâche ?"
+    }
+}

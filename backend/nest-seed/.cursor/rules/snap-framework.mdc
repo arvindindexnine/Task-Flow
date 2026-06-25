@@ -1,0 +1,111 @@
+---
+description: A developer's guide to using the Snap framework utilities in the Lentra backend.
+---
+
+# Using the Snap Framework
+
+The Snap framework (`@snap/core`) provides a set of powerful, reusable tools for this project. This guide defines the standard patterns for using them.
+
+## 1. Logging with Winston
+
+The Snap framework provides a pre-configured `logger` for all application-level logging.
+
+### How to Use:
+
+- Import the logger: `import { logger } from '@snap/core';`
+- Use the appropriate log level for the situation.
+
+### Rules:
+
+- **Use `logger.info()`** for significant events, such as the successful creation of an entity.
+- **Use `logger.debug()`** for detailed, verbose information that is useful for tracing a specific request.
+- **Use `logger.error()`** inside a `catch` block to log any unexpected errors. **Always include the error object** in the log's metadata to capture the stack trace.
+- **Include Context**: All log messages should include a metadata object with relevant information (e.g., `{ userId: user.id }`).
+
+```typescript
+import { logger } from '@snap/core';
+
+@Injectable()
+export class UserService {
+  async createUser(dto: CreateUserDto): Promise<User> {
+    logger.debug('Attempting to create user', { email: dto.email });
+
+    try {
+      const user = await this.userRepository.create(dto);
+      logger.info('User created successfully', { userId: user.id });
+      return user;
+    } catch (error) {
+      logger.error('Failed to create user', { email: dto.email, error });
+      throw error;
+    }
+  }
+}
+```
+
+## 2. Accessing Request Context
+
+The framework automatically tracks context (like `requestId`) for every incoming request. This is essential for tracing and logging.
+
+### How to Use:
+
+- Inject the `ClsService` into your provider.
+- Use `this.cls.get('requestContext')` to retrieve the context.
+
+```typescript
+import { ClsService } from 'nestjs-cls';
+import { RequestContext } from '@snap/core';
+
+@Injectable()
+export class MyService {
+  constructor(private readonly cls: ClsService) {}
+
+  doSomething() {
+    const ctx = this.cls.get<RequestContext>('requestContext');
+    logger.info(`Operation started for request: ${ctx.requestId}`);
+  }
+}
+```
+
+## 3. Custom Validation
+
+The Snap framework provides custom `class-validator` decorators for common validation scenarios.
+
+### Available Custom Validators:
+
+- `@IsPassword()`: Enforces the project's password strength requirements.
+- `@IsMobileNumber()`: Validates that a string is a properly formatted mobile number.
+- `@IsUsername()`: Enforces the project's username constraints.
+
+### Rule:
+
+- You **must** use these decorators in your DTOs where applicable. Do not re-implement this validation logic.
+
+```typescript
+import { IsPassword, IsMobileNumber } from '@snap/core';
+
+export class CreateUserDto {
+  @IsPassword()
+  password: string;
+
+  @IsMobileNumber()
+  phone: string;
+}
+```
+
+## 4. Throwing Custom Exceptions
+
+For business logic errors, use the custom `SeedException`. This ensures the error is handled correctly by the global exception filter and returns a properly formatted HTTP response.
+
+### Rule:
+
+- Do not throw generic `Error` objects or standard `HttpException`s from your services for business rule violations. **Always use `SeedException`**.
+
+```typescript
+import { SeedException } from '@snap/core';
+import { HttpStatus } from '@nestjs/common';
+
+// ... inside a service method
+if (await this.userRepository.findByEmail(email)) {
+  throw new BusinessException('Email address is already in use', HttpStatus.CONFLICT);
+}
+```

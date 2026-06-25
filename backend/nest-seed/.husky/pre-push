@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Uncomment below given commands to generate sonar analysis after pushing code
+
+npm run test:cov
+npm run sonar

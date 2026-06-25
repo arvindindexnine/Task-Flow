@@ -1,0 +1,66 @@
+{
+    "title": "Admin Dashboard",
+    "subtitle": "Manage users and oversee system activity",
+    "stats": {
+        "totalUsers": "Total Users",
+        "totalTasks": "Total Tasks",
+        "activeMembers": "Active Members"
+    },
+    "management": {
+        "title": "User Management",
+        "description": "Click on a user to expand and view their current tasks in read-only mode.",
+        "table": {
+            "user": "User",
+            "role": "Role",
+            "status": "Status",
+            "tasks": "Tasks",
+            "actions": "Actions",
+            "noUsers": "No users found."
+        },
+        "details": "Details",
+        "userTasks": "{{name}}'s Tasks",
+        "deleteConfirm": "Are you sure you want to delete user {{email}}? This action cannot be undone.",
+        "deleteSuccess": "User deleted successfully",
+        "deleteError": "Failed to delete user",
+        "roles": {
+            "member": "Member",
+            "admin": "Admin",
+            "super_admin": "Super Admin"
+        },
+        "status": {
+            "approved": "Approved",
+            "pending": "Pending",
+            "active": "Active",
+            "rejected": "Rejected"
+        },
+        "filters": "FILTERS"
+    },
+    "approval": {
+        "title": "Pending Admin Applications",
+        "description": "New admin registrations require your approval to access administrative features.",
+        "pending": "PENDING",
+        "approve": "Approve",
+        "reject": "Reject",
+        "success": "Admin application {{status}}",
+        "error": "Operation failed"
+    },
+    "create": {
+        "button": "Add User",
+        "title": "Create New User",
+        "labels": {
+            "name": "Full Name",
+            "email": "Email Address",
+            "role": "Role",
+            "password": "Initial Password",
+            "confirmPassword": "Confirm Password"
+        },
+        "placeholders": {
+            "name": "John Doe",
+            "email": "email@example.com",
+            "role": "Select a role"
+        },
+        "submit": "Create Account",
+        "success": "User created successfully",
+        "error": "Failed to create user"
+    }
+}

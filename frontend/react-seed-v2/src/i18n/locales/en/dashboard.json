@@ -1,0 +1,25 @@
+{
+  "title": "Dashboard",
+  "welcome": "Welcome back,",
+  "overview": "Here's your task overview.",
+  "stats": {
+    "total": "Total Tasks",
+    "pending": "Pending Tasks",
+    "inProgress": "In Progress Tasks",
+    "completed": "Completed Tasks"
+  },
+  "charts": {
+    "frequency": "Tasks Created Over Time",
+    "status": "Current Task Status",
+    "frequencyLabel": "Tasks Created"
+  },
+  "admin": {
+    "title": "Users",
+    "addUser": "Add User",
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "role": "Role"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+---
+alwaysApply: true
+---
+
+- **Prefer Lodash**: Use utilities of Lodash wherever possible over built in methods. Goal is to keep code clean, maintainable and readable
+- **Avoid N+1 queries**: Never execute database queries inside loops. Use batch operations (`findByIds`, `insert`, `update`) or eager loading instead of individual queries per iteration.
+- **Avoid network calls in loops**: Never make external API calls, cache operations, or database queries inside loops. Use batch processing, parallel execution, or data aggregation to minimize network round trips.
+- **Exception Handling and Use of try / catch**: Avoid try-catch in controller, service and repository files - let the global filter handle exceptions. For more guideline check exception handling rule in `./exception-handling.mdc`
+- **Code Comments**: Avoid Using the code comments of task number, unnecessary description etc. Only provide write the comments for the code which complex in nature, has some hidden functional requirement which is not easy to understand by reading the code.
+- **JSDoc**: Use JSdDoc for all the service methods wherever needed.
